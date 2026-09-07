@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>Tela da Camera</title>
+</head>
+
+<body class="bg-[#151515] h-screen">
+
+<main class="max-w-130 m-auto h-full relative bg-black overflow-hidden">
+
+    <section class="absolute inset-0 bg-white/80">
+
+        <img src="./img/Imagem_Camera.jpg" alt="Imagem representando a tela de uma camera apontando para rua" class="w-full h-full object-cover opacity-90" id="Camera_Atual">
+    </section>
+
+    <header class="absolute top-0 left-0 w-full h-18 z-10 bg-black">
+        <nav class="h-full">
+            <ul class="flex flex-row justify-between w-full items-center h-full p-5">
+                <li class="abrir_Modal"><img src="./img/Icon_Flash.png" alt="Icone de um flash de camera" class="w-4 opacity-70 cursor-pointer hover:opacity-100"></li>
+                <li class="abrir_Modal"><img src="./img/Icon_HDR.png" alt="Icone de um HDR de camera" class="w-6 opacity-70 cursor-pointer hover:opacity-100"></li>
+                <li class="abrir_Modal"><img src="./img/Icon_Usuario_LC.png" alt="Icone de um usuario de camera" class="w-6 opacity-70 cursor-pointer hover:opacity-100"></li>
+                <li class="abrir_Modal"><img src="./img/Icon_Clock.png" alt="Icone de um relogio de camera" class="w-6 opacity-70 cursor-pointer hover:opacity-100"></li>
+                <li class="abrir_Modal"><img src="./img/Icon_Config.png" alt="Icone de um relogio de camera" class="w-6 opacity-70 cursor-pointer hover:opacity-100 transition-all duration-300"></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="absolute bottom-0 left-0 w-full z-10 bg-black">
+
+        <section class="w-full overflow-hidden transition-all duration-300 max-h-0 opacity-0" id="sectionLista">
+            <div class="text-white flex flex-row items-center justify-between gap-3 p-4 w-full border-b border-white/30" id="Lista_Filtros">
+                <ul class="flex flex-row-reverse gap-4 overflow-x-auto flex-nowrap hide-scrollbar justify-center" id="Lista_Filtros_Conteudo">
+
+                </ul>
+                <button type="button" id="Button_Explorar" class="bg-[#0051FF] transition-all duration-200 hover:bg-[#3e83dd] rounded-sm p-1 cursor-pointer shrink-0">
+                    <a href="./html/Login.html">Explorar</a>
+                </button>
+            </div>
+        </section>
+
+        <section class="w-full py-4 px-5 flex flex-col gap-4 bg-black pb-5">
+
+            <div class="flex flex-row items-center justify-between">
+                <div class="w-18"></div>
+                <p class="text-white text-base">Ajustar câmera</p>
+                <div class="bg-[#0051FF] p-1 flex items-center gap-1 text-white rounded-sm">
+                    <button type="button" class="cursor-pointer" id="ButtonModes">Modes</button>
+                </div>
+            </div>
+
+            <div class="flex flex-row items-center justify-between px-2">
+                <img src="./img/Imagem_Ceu.jpg" alt="Miniatura da última foto tirada" id="AbrirGaleria" class="w-12 h-12 object-cover rounded-md border border-white cursor-pointer">
+                <button type="button" id="Button_Capturar" class="w-16 h-16 rounded-full border-4 border-white cursor-pointer"></button>
+                <img src="./img/Icon_VirarCamera.png" alt="Ícone de trocar câmera" class="w-8 opacity-90 cursor-pointer">
+            </div>
+
+        </section>
+    </div>
+
+
+    <div id="modal_Opcoes" class="hidden fixed inset-0 bg-black/40 z-10 items-center justify-center p-4">
+        <div id="modalOpcoesConteudo" class="bg-[#242424] flex flex-col items-center text-center gap-5 text-white p-8 w-full max-w-100 border border-white scale-95 opacity-0 transition-all duration-300">
+
+            <div class="w-full flex flex-row-reverse">
+                <img src="./img/Sair_Icon.png" alt="Icone de Sair" class="w-6 cursor-pointer opacity-60 hover:opacity-100 transition-all" id="Modal_Sair">
+            </div>
+
+            <h2 class="text-2xl">Ops, voltamos já!</h2>
+            <span class="opacity-65">Estamos atualizando algumas coisas por aqui. tente de novo daqui a pouco.</span>
+            <img src="./img/Atualizacao_Icon.png" alt="Icone de Atualização" class="w-25">
+        </div>
+    </div>
+
+    <div id="fotos_Galeria" class="hidden absolute inset-0 bg-black/40 items-center justify-center p-4 z-20">
+        <div id="ModalGaleriaConteudo" class="bg-[#242424] relative items-center text-white w-full max-w-130 h-120 border border-white transition-all duration-300 scale-95 opacity-0">
+            <img src="./img/Sair_Icon.png" alt="Fechar galeria" id="Sair_Galeria" class="w-6 cursor-pointer absolute top-2 right-2">
+            <img src="./img/Imagem_Ceu.jpg" alt="Última foto tirada" class="w-full h-full">
+        </div>            
+    </div>
+        
+    </div>
+</main>
+
+
+<script src="./js/script.js"></script>
+
+</body>
+</html>

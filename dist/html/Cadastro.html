@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
+    <link rel="stylesheet" href="../css/style.css" />
+    <title>Area de Cadastro</title>
+</head>
+<body class="bg-[#151515] h-screen ">
+
+    <main class=" max-w-135 m-auto h-full flex flex-col justify-center border border-white">
+
+        <header class="flex flex-col items-center gap-8 mb-6">
+            <img src="../img/Logo_Modes.png" alt="Logo da Iniciativa MODES" class="max-w-50">
+            <p class="text-3xl bg-[#0051FF] text-white p-1">Uma iniciativa JOVI</p>
+            <div id="Header_Text"></div>
+        </header>
+
+        <form class="w-full p-7 flex flex-col gap-4">
+            <label for="usuarioLogin" class="flex flex-row items-center gap-2">
+                <img src="../img/Icon_Usuario_LC.png" alt="Icone de Usuario" class="max-w-7" id="imagem_Usuario">
+                <span class="text-2xl text-white" id="UsuarioText">Usuario</span>
+            </label>
+            <input type="text" name="usuarioLogin" id="usuarioLogin" placeholder="Digite seu Usuario..." class="bg-[#55586C] p-2 w-full text-white h-12" maxlength="30" required>
+
+            <label for="emailLogin" class="flex flex-row items-center gap-2">
+                <img src="../img/Icon_Email_LC.png" alt="Icone de Email" class="max-w-7" id="imagem_Email">
+                <span class="text-2xl text-white" id="EmailText">Email</span>
+            </label>
+            <input type="email" name="emailLogin" id="emailLogin" placeholder="Digite seu Email..." class="bg-[#55586C] p-2 w-full text-white h-12" maxlength="50" required>
+
+            <label for="senhaLogin" class="flex flex-row items-center gap-2">
+                <img src="../img/Icon_Senha_LC.png" alt="Icone de Senha" class="max-w-5" id="imagem_Senha">
+                <span class="text-2xl text-white" id="SenhaText">Senha</span>
+            </label>
+            <input type="password" name="senhaLogin" id="senhaLogin" placeholder="Digite sua Senha..." class="bg-[#55586C] p-2  w-full text-white h-12" maxlength="30" required>
+
+            <div class="flex flex-row justify-between w-full flex-wrap">
+                <a href="./Login.html" class="hover:underline text-white mt-2">Já possuo conta</a>
+                <div class="flex flex-row gap-2 items-center mt-2">
+                <input type="checkbox" id="checkboxLogin">
+                <span class="text-white" id="checkbox_Text">Usar com responsabilidade</span>
+                </div>
+            </div>
+            <button type="button"
+                class="bg-[#0051FF] h-12 cursor-pointer text-2xl mt-4 text-white w-full 
+                transition-all duration-200 hover:bg-[#3e83dd]" id="Button_Cadastrar">
+                Cadastrar
+            </button>
+        </form>
+
+    </main>
+    
+    <script type="module" src="../js/cadastro.js"></script>
+</body>
+</html>

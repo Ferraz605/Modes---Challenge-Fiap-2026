@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
+    <link rel="stylesheet" href="../css/style.css" />
+    <title>Criando Modo</title>
+</head>
+<body class="bg-[#151515] h-screen ">
+    <main class=" max-w-135 m-auto min-h-full flex flex-col border border-white">
+
+        <header class="flex flex-row justify-between w-full">
+            <img src="../img/Logo_Modes.png" alt="Icone do Modes" class="h-8 m-6">
+            <button class="bg-[#0051FF] h-8 cursor-pointer text-white  w-30
+                transition-all duration-200 hover:bg-[#3e83dd] m-7 rounded-2xl text-[18px]" id="Button_PublicarUm">Publicar</button>
+        </header>
+
+        <section class="flex flex-col w-full">
+            <img src="../img/Icon_Arrow_Left.png" alt="Seta para Sair da Criação de Modos" class="w-5 ml-5 cursor-pointer">
+            <div class="bg-gray-500 m-5 h-45 flex items-center justify-center ">
+                <img src="../img/Icon_Vazio.png" alt="Icone do tipo da imagem" id="Imagem_Post" class="max-w-40 m-5">
+            </div>
+        </section>
+
+        <form>
+        
+            <div class="m-5 border-b border-white pb-6">
+                <div class="flex flex-row justify-between mb-5">
+                 <label for="nomeModo" class="text-3xl text-white">Nome do modo</label>
+                 <button class="bg-[#55586C]/90 pl-2 pr-2 rounded-[13px] text-white cursor-pointer">Adicione um fundo</button>
+                </div>
+                <input type="text" name="nomeModo" id="nomeModo" placeholder="Adicione o nome..." class="bg-[#55586C] p-2 text-[18px] text-white h-12 w-full" maxlength="20" required>
+            </div>
+
+            <div class="m-5 border-b border-white pb-6">
+                <h2 class="text-3xl text-white">Adicione uma Categoria</h2>
+                <ul class="flex flex-row gap-4 text-white">
+                    <li class="bg-[#55586C] rounded-lg pl-2 pr-2 mt-4 cursor-pointer text-[18px]">Noturno</li>
+                    <li class="bg-[#55586C] rounded-lg pl-2 pr-2 mt-4 cursor-pointer text-[18px]">Comida</li>
+                    <li class="bg-[#55586C] rounded-lg pl-2 pr-2 mt-4 cursor-pointer text-[18px]">Paisagem</li>
+                    <li class="bg-[#55586C] rounded-lg pl-2 pr-2 mt-4 cursor-pointer text-[18px]">Festa</li>
+                    <li class="bg-[#55586C] rounded-lg pl-2 pr-2 mt-4 cursor-pointer text-[18px]">Selfie</li>
+                </ul>
+            </div>
+
+            <div class="m-5 border-b border-white pb-6">
+                <h2 class="text-3xl text-white mb-4"> Descrição </h2>
+                <textarea placeholder="Adicione uma descrição..." class="bg-[#55586C]/90 p-3 w-full min-h-35 text-white text-[18px]" id="descricao_modo" maxlength="180"></textarea>
+            </div>
+
+            <div class="m-5 border-b border-white pb-6">
+                <h2 class="text-3xl text-white mb-4"> Preview da Foto</h2>
+                <img src="../img/Imagem_Camera.jpg" alt="Imagem Preview" class="max-h-145 w-full">
+            </div>
+
+            <div class="m-5 border-b border-white pb-6">
+    <h2 class="text-3xl text-white mb-4 flex items-center gap-2 cursor-pointer">
+        Configurações
+        <img src="../img/Icon_ArrowDown.png" alt="Expandir configurações" class="w-10 mt-3">
+    </h2>
+
+    <div class="flex flex-col gap-5">
+
+        <div>
+            <div class="flex flex-row justify-between text-white text-[18px]">
+                <label for="brilho">Brilho:</label>
+                <span id="valor_brilho">0</span>
+            </div>
+            <input type="range" id="brilho" min="-50" max="50" value="0" step="1" class="w-full custom-slider">
+        </div>
+
+        <div>
+            <div class="flex flex-row justify-between text-white text-[18px]">
+                <label for="contraste">Contraste:</label>
+                <span id="valor_contraste">0</span>
+            </div>
+            <input type="range" id="contraste" min="-50" max="50" value="0" step="1" class="w-full custom-slider">
+        </div>
+
+        <div>
+            <div class="flex flex-row justify-between text-white text-[18px]">
+                <label for="temperatura">Temperatura:</label>
+                <span id="valor_temperatura">0</span>
+            </div>
+            <input type="range" id="temperatura" min="-50" max="50" value="0" step="1" class="w-full custom-slider">
+        </div>
+
+        <div>
+            <div class="flex flex-row justify-between text-white text-[18px]">
+                <label for="nitidez">Nitidez:</label>
+                <span id="valor_nitidez">0</span>
+            </div>
+            <input type="range" id="nitidez" min="-50" max="50" value="0" step="1" class="w-full custom-slider">
+        </div>
+
+        <div>
+            <div class="flex flex-row justify-between text-white text-[18px]">
+                <label for="saturacao">Saturação:</label>
+                <span id="valor_saturacao">0</span>
+            </div>
+            <input type="range" id="saturacao" min="-50" max="50" value="0" step="1" class="w-full custom-slider">
+        </div>
+
+    </div>
+</div>
+
+<div class="m-5 border-b border-white pb-6">
+    <h2 class="text-3xl text-white mb-4 flex items-center gap-2 cursor-pointer">
+        Configurações Pro
+        <img src="../img/Icon_ArrowDown.png" alt="Expandir configurações pro" class="w-10 mt-3">
+        <span class="bg-[#0051FF] text-white text-sm rounded-md px-2 py-1 ml-1 mt-3">Ativado</span>
+    </h2>
+
+    <div class="flex flex-col gap-5">
+
+        <div>
+            <div class="flex flex-row justify-between text-white text-[18px]">
+                <label for="iso">ISO(Sensibilidade):</label>
+                <span id="valor_iso">0</span>
+            </div>
+            <input type="range" id="iso" min="0" max="6400" value="0" step="100" class="w-full custom-slider">
+        </div>
+
+        <div>
+            <div class="flex flex-row justify-between text-white text-[18px]">
+                <label for="obturador">Obturador(velocidade):</label>
+                <span id="valor_obturador">0/60</span>
+            </div>
+            <input type="range" id="obturador" min="0" max="1000" value="0" step="10" class="w-full custom-slider">
+        </div>
+
+        <div>
+            <div class="flex flex-row justify-between text-white text-[18px]">
+                <label for="abertura">Abertura(profundidade):</label>
+                <span id="valor_abertura">f/0</span>
+            </div>
+            <input type="range" id="abertura" min="0" max="22" value="0" step="0.1" class="w-full custom-slider">
+        </div>
+
+        <div>
+            <div class="flex flex-row justify-between text-white text-[18px]">
+                <label for="exposicao">Exposição(compensação):</label>
+                <span id="valor_exposicao">0</span>
+            </div>
+            <input type="range" id="exposicao" min="-3" max="3" value="0" step="0.1" class="w-full custom-slider">
+        </div>
+
+    </div>
+</div>
+        </form>
+    </main>
+</body>
+</html>

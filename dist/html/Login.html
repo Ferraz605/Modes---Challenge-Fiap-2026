@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
+    <link rel="stylesheet" href="../css/style.css" />
+    <title>Area de Login</title>
+</head>
+<body class="bg-[#151515] h-screen ">
+
+    <main class=" max-w-135 m-auto h-full flex flex-col justify-center border border-white">
+
+        <header class="flex flex-col items-center gap-8 mb-6">
+            <img src="../img/Logo_Modes.png" alt="Logo da Iniciativa MODES" class="max-w-50">
+            <p class="text-3xl bg-[#0051FF] text-white p-1">Uma iniciativa JOVI</p>
+        </header>
+
+        <form class="w-full p-7 flex flex-col gap-4">
+            <label for="emailLogin" class="flex flex-row items-center gap-2">
+                <img src="../img/Icon_Email_LC.png" alt="Icone de Email" class="max-w-7" id="imagem_Email">
+                <span class="text-2xl text-white" id="EmailText">Email</span>
+            </label>
+            <input type="email" name="emailLogin" id="emailLogin" placeholder="Digite seu Email..." class="bg-[#55586C] p-2 w-full text-white h-12" maxlength="50" required>
+
+            <label for="senhaLogin" class="flex flex-row items-center gap-2">
+                <img src="../img/Icon_Senha_LC.png" alt="Icone de Senha" class="max-w-5" id="imagem_Senha">
+                <span class="text-2xl text-white" id="SenhaText">Senha</span>
+            </label>
+            <input type="password" name="senhaLogin" id="senhaLogin" placeholder="Digite sua Senha..." class="bg-[#55586C] p-2  w-full text-white h-12" maxlength="30" required>
+
+            <div class="flex flex-row justify-between w-full flex-wrap">
+                <a href="./Cadastro.html" class="hover:underline text-white mt-2">Criar uma conta</a>     
+                <a href="../Index.html" class="hover:underline text-white mt-2">Sair</a>     
+            </div>
+
+            <button type="button"
+                class="bg-[#0051FF] h-12 cursor-pointer text-2xl mt-4 text-white w-full 
+                transition-all duration-200 hover:bg-[#3e83dd]" id="Button_Entrar">
+                Entrar
+            </button>
+        </form>
+
+    </main>
+
+    <script type="module" src="../js/login.js"></script>
+    
+</body>
+</html>
