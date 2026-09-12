@@ -43,6 +43,7 @@
   appearance: none;
   height: 4px;
   background: #55586C;
+  opacity: 90%;
   border-radius: 999px;
   outline: none;
 }

@@ -41,6 +41,7 @@ buttonEntrar.addEventListener('click', () => {
         marcarErro(senha,senhaText);
         imagemSenha.src = '../img/Icon_SenhaError.png'
     }else {
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuarioEncontrado));
         window.location.href = 'Explorador.html';
     }
 

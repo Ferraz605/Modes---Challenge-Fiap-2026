@@ -26,7 +26,7 @@ export function CriandoUsuario(nome,email,senha) {
     const objUsuario = JSON.parse(localStorage.getItem('Usuario'));    
 
     const novoUsuario = {
-        id: Date.now,
+        id: Date.now(),
         nome: nome,
         email: email,
         senha: senha,
@@ -43,42 +43,41 @@ export function CriandoUsuario(nome,email,senha) {
 const Categorias = [
     {
         id: 1,
-        nome: 'Todos'
+        nome: 'Noturno',
+        icone: '../img/Icon_Lua.png',
+        corFundo: 'bg-gradient-to-r from-[#0051FF] to-[#013F79] m-5 h-45 flex items-center justify-center'
     },
 
     {
         id: 2,
-        nome: 'Pro'
+        nome: 'Comida',
+        icone: '../img/Icon_Comida.png',
+        corFundo: 'bg-gradient-to-r from-[#912B00] to-[#FF690C] m-5 h-45 flex items-center justify-center'
+
     },
 
     {
         id: 3,
-        nome: 'Noturno',
-        icone: '../img/Icon_Lua.png'
+        nome: 'Paisagem',
+        icone: '../img/Icon_Montanha.png',
+        corFundo: 'bg-gradient-to-r from-[#3FA2FF] to-[#105594] m-5 h-45 flex items-center justify-center'
+
     },
 
     {
         id: 4,
-        nome: 'Comida',
-        icone: '../img/Icon_Comida.png'
+        nome: 'Festa',
+        icone: '../img/Icon_Festa.png',
+        corFundo: 'bg-gradient-to-r from-[#FF0037] to-[#B70080] m-5 h-45 flex items-center justify-center' 
+
     },
 
     {
         id: 5,
-        nome: 'Paisagem',
-        icone: '../img/Icon_Montanha.png'
-    },
-
-    {
-        id: 6,
-        nome: 'Festa',
-        icone: '../img/Icon_Festa.png'
-    },
-
-    {
-        id: 7,
         nome: 'Selfie',
-        icone: '../img/Icon_Selfie.png'
+        icone: '../img/Icon_Selfie.png',
+        corFundo: 'bg-gradient-to-r from-[#D4AAFF] to-[#6B2FBF] m-5 h-45 flex items-center justify-center'
+
     }
 ];
 
@@ -88,12 +87,19 @@ export function InicializarCategoria() {
     }
 }
 
+export function obterCategoriasSalvas() {
+    const objCategoria = JSON.parse(localStorage.getItem('Categoria')); 
+    return objCategoria;
+};
+
 // ####################################### MODOS #######################################
 
 const Modos = [
   {
         id_modo: 1,
         id_categoria: 'Paisagem',
+        id_usuario: 1,
+        nome_usuario: 'mari.foto',
         nome: 'Golden Hour',
         descricao: 'Tons quentes que simulam o horário do pôr do sol.',
         brilho: 10,
@@ -101,11 +107,14 @@ const Modos = [
         temperatura: 20,
         nitidez: 5,
         saturacao: 25,
-        imagemFundo: null
+        imagemFundo: null,
+        curtidas: 2441
     },
     {
         id_modo: 2,
         id_categoria: 'Festa',
+        id_usuario: 2,
+        nome_usuario: 'dj_pedro',
         nome: 'Retrô 35mm',
         descricao: 'Efeito vintage inspirado em filmes analógicos.',
         brilho: -5,
@@ -113,7 +122,8 @@ const Modos = [
         temperatura: 10,
         nitidez: -10,
         saturacao: -15,
-        imagemFundo: null
+        imagemFundo: null,
+        curtidas: 1031
     }
 ];
 
@@ -128,20 +138,22 @@ export function obterModosSalvos() {
     return objModos;
 };
 
-export function CriandoModo(categoria, nome,descricao,bilho,constraste,temperatura,nitidez,saturacao,imagemFundo) {
+export function CriandoModo(idModo,categoria,idUsuario,usuario,nome,descricao,brilho,contraste,temperatura,saturacao,imagemFundo) {
     const objModos = JSON.parse(localStorage.getItem('Modos'));    
 
     const novoModo = {
-        id_modo: Date.now(),
-        categoria: categoria,
+        id_modo: idModo,
+        id_categoria: categoria,
+        id_usuario: idUsuario,
+        nome_usuario: usuario,
         nome: nome,
         descricao: descricao,
-        brilho: bilho,
-        contraste: constraste,
+        brilho: brilho,
+        contraste: contraste,
         temperatura: temperatura,
-        nitidez: nitidez,
         saturacao: saturacao,
-        imagemFundo: imagemFundo
+        imagemFundo: imagemFundo,
+        curtidas: 0
     }
 
     objModos.push(novoModo);
@@ -162,4 +174,20 @@ export function obterModosProSalvos() {
     const objmodosPro = JSON.parse(localStorage.getItem('modosPro')); 
     return objmodosPro;
 };
+
+export function CriandoModoPro(idModo, iso, obturador, abertura, exposicao) {
+    const objModosPro = JSON.parse(localStorage.getItem('modosPro'));    
+
+    const novoModoPro = {
+        id_modo: idModo,
+        iso: iso,
+        obturador: obturador,
+        abertura: abertura,
+        exposicao: exposicao
+    }
+
+    objModosPro.push(novoModoPro);
+    localStorage.setItem('modosPro', JSON.stringify(objModosPro));
+}
+
 
