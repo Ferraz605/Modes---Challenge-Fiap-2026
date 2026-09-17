@@ -3,9 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"/>
+    <link rel="stylesheet" href="../css/style.css" />
     <title>Explorador</title>
 </head>
-<body>
-    
+<body class="bg-[#1c1c1c] h-screen">
+    <main class="bg-[#151515] max-w-135 m-auto min-h-full flex flex-col">
+
+        <header class="flex flex-row justify-between w-full" id="headerModes">
+            <a href="Explorador.html" class="h-8">
+            <img src="../img/Logo_Modes.png" alt="Icone do Modes" class="h-8 m-6 opacity-100" id="logoModes"/>
+            </a>
+                <div class="flex flex-row items-center gap-5 m-6">
+                    <img src="../img/Icon_Lupa.png" alt="Icone de Lupa" class="w-8 cursor-pointer" id="LupaPesquisar">
+                    <input type="text" id="PesquisaModosInput" placeholder="Digite aqui..." class="text-white h-10 text-[18px] border-b border-white outline-none opacity-0 w-0 transition-all duration-300 " maxlength="25">
+                </div>
+        </header>    
+
+        <ul class="flex flex-row  gap-5 text-white overflow-x-auto flex-nowrap hide-scrollbar m-5 border-b border-white/50 pb-6" id="listaCategorias"></ul>        
+        
+        
+        <section id="sectionDestaques">
+            <h2 class="text-[#D0D0D0] text-3xl m-5">Em destaque</h2>
+            <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-5 m-5 pb-7 border-b border-white/60" id="listaDestaques"></div>
+        </section> 
+
+        <section>
+            <h2 class="text-[#D0D0D0] text-3xl m-5" id="DescubraText">Descubra</h2>
+            <div class=" flex-col gap-8 items-center mt-35 hidden" id="nadaEncontrado">
+              <img src="../img/Icon_Vazio.png" alt="Icon de nada encontrado" class="opacity-80 w-80">
+              <h2 class="text-4xl text-white">Não encontrado</h2>
+            </div>
+            <div class="grid grid-cols-2 max-sm:grid-cols-1 gap-5 m-5 mb-30" id="listaModos"></div>
+        </section>
+      
+        <div class="flex flex-row w-full max-w-135 h-23 justify-between items-center max-sm:p-2 z-12 p-8 bg-[#151515] border-t border-white text-white fixed bottom-0 left-0 right-0 mx-auto">
+        
+        <a href="../Index.html" class="flex flex-col gap-2 justify-center items-center cursor-pointer opacity-40 hover:opacity-100 hover:scale-105 transition-all duration-300">
+          <div class="w-6 h-6 flex items-center justify-center">
+            <img src="../img/Icon_Camera.png" alt="Icone de Camera" class="max-w-6 max-h-6 "/>
+          </div>
+          <h2>Câmera</h2>
+        </a>
+
+        <a href="Explorador.html" class="flex flex-col gap-2 justify-center items-center cursor-pointer">
+          <div class="w-6 h-6 flex items-center justify-center">
+            <img src="../img/Icon_Bulsula.png" alt="Icone de Camera" class="max-w-6 max-h-6"/>
+          </div>
+          <h2>Explorar</h2>
+        </a>
+
+        <a href="CriandoModo.html" class="flex flex-col gap-2 justify-center items-center cursor-pointer opacity-40 hover:opacity-100 hover:scale-105 transition-all duration-300">
+          <div class="w-6 h-6 flex items-center justify-center">
+            <img src="../img/Icon_Plus.png" alt="Icone de Camera" class="max-w-6 max-h-6"/>
+          </div>
+          <h2>Criar</h2>
+        </a>
+
+        <div class="flex flex-col gap-2 justify-center items-center cursor-pointer opacity-40 hover:opacity-100 hover:scale-105 transition-all duration-300">
+          <div class="w-6 h-6 flex items-center justify-center">
+            <img src="../img/Icon_Salvos.png" alt="Icone de Camera" class="max-w-6 max-h-6"/>
+          </div>
+          <h2>Salvos</h2>
+        </div>
+
+        <div class="flex flex-col gap-2 justify-center items-center cursor-pointer opacity-40 hover:opacity-100 hover:scale-105 transition-all duration-300">
+          <div class="w-6 h-6 flex items-center justify-center">
+            <img src="../img/Icon_Usuario.png" alt="Icone de Camera" class="max-w-6 max-h-6"/>
+          </div>
+          <h2>Perfil</h2>
+        </div>
+
+      </div>
+    </main>
+
+    <script type="module" src="../js/explorador.js"></script>
 </body>
 </html>

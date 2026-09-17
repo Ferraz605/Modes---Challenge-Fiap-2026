@@ -2,13 +2,29 @@
 
 const Usuario = [
     {
-        id: Date.now(),
+        id: 1,
         nome: 'Administrador',
         email: 'dministrador@gmail.com',
         senha: '1234',
         biografia: 'Sou administrador mando em tudo',
-        fotoPerfil: ''
-    }
+        fotoPerfil: '../img/Icon_UsuarioPadrao.png'
+    },
+    {
+        id: 2,
+        nome: 'mari.foto',
+        email: 'mariFoto@gmail.com',
+        senha: '1234',
+        biografia: 'Sou a mari e gosto de fotos de festas',
+        fotoPerfil: '../img/Icon_UsuarioPadrao.png'
+    },
+    {
+        id: 3,
+        nome: 'leo_m',
+        email: 'leoM@gmail.com',
+        senha: '1234',
+        biografia: 'Sou o leo e gosto de todos os tipos de fotos',
+        fotoPerfil: '../img/Icon_UsuarioPadrao.png'
+    },
 ];
 
 export function InicializarUsuario() {
@@ -31,7 +47,7 @@ export function CriandoUsuario(nome,email,senha) {
         email: email,
         senha: senha,
         biografia: '',
-        fotoPerfil: ''
+        fotoPerfil: '../img/Icon_UsuarioPadrao.png'
     }
 
     objUsuario.push(novoUsuario);
@@ -42,43 +58,46 @@ export function CriandoUsuario(nome,email,senha) {
 
 const Categorias = [
     {
-        id: 1,
-        nome: 'Noturno',
-        icone: '../img/Icon_Lua.png',
-        corFundo: 'bg-gradient-to-r from-[#0051FF] to-[#013F79] m-5 h-45 flex items-center justify-center'
+        id:1,
+        nome: 'Todos'
     },
-
     {
         id: 2,
-        nome: 'Comida',
-        icone: '../img/Icon_Comida.png',
-        corFundo: 'bg-gradient-to-r from-[#912B00] to-[#FF690C] m-5 h-45 flex items-center justify-center'
-
+        nome: 'Noturno',
+        icone: '../img/Icon_Lua.png',
+        corFundo: 'bg-gradient-to-r from-[#0051FF] to-[#013F79]'
     },
 
     {
         id: 3,
-        nome: 'Paisagem',
-        icone: '../img/Icon_Montanha.png',
-        corFundo: 'bg-gradient-to-r from-[#3FA2FF] to-[#105594] m-5 h-45 flex items-center justify-center'
+        nome: 'Comida',
+        icone: '../img/Icon_Comida.png',
+        corFundo: 'bg-gradient-to-r from-[#912B00] to-[#FF690C]'
 
     },
 
     {
         id: 4,
-        nome: 'Festa',
-        icone: '../img/Icon_Festa.png',
-        corFundo: 'bg-gradient-to-r from-[#FF0037] to-[#B70080] m-5 h-45 flex items-center justify-center' 
+        nome: 'Paisagem',
+        icone: '../img/Icon_Montanha.png',
+        corFundo: 'bg-gradient-to-r from-[#3FA2FF] to-[#105594]'
 
     },
 
     {
         id: 5,
-        nome: 'Selfie',
-        icone: '../img/Icon_Selfie.png',
-        corFundo: 'bg-gradient-to-r from-[#D4AAFF] to-[#6B2FBF] m-5 h-45 flex items-center justify-center'
+        nome: 'Festa',
+        icone: '../img/Icon_Festa.png',
+        corFundo: 'bg-gradient-to-r from-[#FF0037] to-[#B70080]' 
 
-    }
+    },
+
+   // {
+     //   id: 5,
+       // nome: 'Selfie',
+       // icone: '../img/Icon_Selfie.png',
+       // corFundo: 'bg-gradient-to-r from-[#D4AAFF] to-[#6B2FBF] m-5 h-45 flex items-center justify-center'
+    //}
 ];
 
 export function InicializarCategoria() {
@@ -97,7 +116,7 @@ export function obterCategoriasSalvas() {
 const Modos = [
   {
         id_modo: 1,
-        id_categoria: 'Paisagem',
+        id_categoria: 4,
         id_usuario: 1,
         nome_usuario: 'mari.foto',
         nome: 'Golden Hour',
@@ -112,7 +131,7 @@ const Modos = [
     },
     {
         id_modo: 2,
-        id_categoria: 'Festa',
+        id_categoria: 5,
         id_usuario: 2,
         nome_usuario: 'dj_pedro',
         nome: 'Retrô 35mm',
@@ -124,7 +143,68 @@ const Modos = [
         saturacao: -15,
         imagemFundo: null,
         curtidas: 1031
-    }
+    },
+    {
+        id_modo: 3,
+        id_categoria: 3,
+        id_usuario: 3,
+        nome_usuario: 'ana_r',
+        nome: 'Comida Viva',
+        descricao: null,
+        brilho: -5,
+        contraste: 20,
+        temperatura: 10,
+        nitidez: -10,
+        saturacao: -15,
+        imagemFundo: null,
+        curtidas: 1809
+    },
+    {
+        id_modo: 4,
+        id_categoria: 4,
+        id_usuario: 4,
+        nome_usuario: 'ana_r',
+        nome: 'Paisagem Fria',
+        descricao: null,
+        brilho: -5,
+        contraste: 20,
+        temperatura: 10,
+        nitidez: -10,
+        saturacao: -15,
+        imagemFundo: null,
+        curtidas: 650
+    },
+    {
+        id_modo: 5,
+        id_categoria: 5,
+        id_usuario: 5,
+        nome_usuario: 'joao_lens',
+        nome: 'Festa Neon',
+        descricao: null,
+        brilho: -5,
+        contraste: 20,
+        temperatura: 10,
+        nitidez: -10,
+        saturacao: -15,
+        imagemFundo: null,
+        curtidas: 2100
+    },
+    {
+        id_modo: 6,
+        id_categoria: 2,
+        id_usuario: 6,
+        nome_usuario: 'joao_lens',
+        nome: 'Flash Suave',
+        descricao: null,
+        brilho: -5,
+        contraste: 20,
+        temperatura: 10,
+        nitidez: -10,
+        saturacao: -15,
+        imagemFundo: null,
+        curtidas: 121
+    },
+    
 ];
 
 export function InicializarModos() {
@@ -190,4 +270,77 @@ export function CriandoModoPro(idModo, iso, obturador, abertura, exposicao) {
     localStorage.setItem('modosPro', JSON.stringify(objModosPro));
 }
 
+// ####################################### COMENTARIO #######################################
 
+const comentario = [
+    {
+        id_comentario: 1,
+        id_modo: 1,
+        id_usuario: 2,
+        ds_comentario: 'Perfeito para a cidade à noite!',
+        data: Date.now()
+    },
+    {
+        id_comentario: 2,
+        id_modo: 1,
+        id_usuario: 3,
+        ds_comentario: 'Usei no show ontem, ficou incrível.',
+        data: Date.now()
+    }
+]
+
+
+export function InicializarComentarios() {
+    if (localStorage.getItem('comentarios') === null) {
+        localStorage.setItem('comentarios', JSON.stringify(comentario));
+    }
+}
+
+export function obterComentariosSalvos() {
+    const objcomentario = JSON.parse(localStorage.getItem('comentarios')); 
+    return objcomentario;
+};
+
+export function CriandoComentario(idModo, idUsuario, ds_comentario) {
+    const objcomentario = JSON.parse(localStorage.getItem('comentarios'));    
+
+    const novoComentario = {
+        id_comentario: Date.now(),
+        id_modo: idModo,
+        id_usuario: idUsuario,
+        ds_comentario: ds_comentario,
+        data: Date.now()
+    }
+
+    objcomentario.push(novoComentario);
+    localStorage.setItem('comentarios', JSON.stringify(objcomentario));
+    }
+
+
+// ####################################### CURTIDAS #######################################
+
+const curtidas = [];
+
+export function InicializarCurtidas() {
+    if (localStorage.getItem('curtidas') === null) {
+        localStorage.setItem('curtidas', JSON.stringify(curtidas));
+    }
+}
+
+export function obterCurtidasSalvas() {
+    const objcurtidas = JSON.parse(localStorage.getItem('curtidas')); 
+    return objcurtidas;
+};
+
+export function AdicionandoCurtida(idModo, idUsuario,curtido) {
+    const objcurtidas = JSON.parse(localStorage.getItem('curtidas'));    
+
+    const novaCurtida = {
+        idCurtida: Date.now(),
+        idModo: idModo,
+        idUsuario: idUsuario,
+    }
+
+    objcurtidas.push(novaCurtida);
+    localStorage.setItem('curtidas', JSON.stringify(objcurtidas));
+    }

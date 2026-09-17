@@ -78,7 +78,7 @@ let previewImagem = '../img/Imagem_Camera.jpg';
 const addCategoriaText = document.getElementById('AdicionarCategoriaText');
 
 const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado'));
-const nomeUsuario = usuarioAtual?.nome ?? 'Usuario Desconhecido';
+const nomeUsuario = usuarioAtual?.nome ?? 'UU';
 const idUsuario = usuarioAtual?.ud ?? Date.now();
 
 // FUNÇÔES
@@ -95,26 +95,29 @@ function ExibirCategorias() {
     const objCategoria = obterCategoriasSalvas();
 
     objCategoria.forEach(categoria => {
-        const item = document.createElement('li');
-        item.textContent = categoria.nome;
-        item.className = 'bg-[#55586C] rounded-lg pl-2 pr-2 mt-4 cursor-pointer text-[18px]';
-        item.dataset.categoriaId = categoria.id;
-        listaCategorias.appendChild(item);
+        if(categoria.id != 1){
+            const item = document.createElement('li');
+            item.textContent = categoria.nome;
+            item.className = 'bg-[#55586C] rounded-lg pl-2 pr-2 mt-4 cursor-pointer text-[18px]';
+            item.dataset.categoriaId = categoria.id;
+            listaCategorias.appendChild(item);
 
-        item.addEventListener('click', () => {
-            listaCategorias.querySelectorAll('li').forEach(li => {
-                li.classList.remove('bg-[#0051FF]');
-                li.classList.add('bg-[#55586C]');
-            });
+            item.addEventListener('click', () => {
+                listaCategorias.querySelectorAll('li').forEach(li => {
+                    li.classList.remove('bg-[#0051FF]');
+                    li.classList.add('bg-[#55586C]');
+                });
 
-            item.classList.remove('bg-[#55586C]');
-            item.classList.add('bg-[#0051FF]');
+                item.classList.remove('bg-[#55586C]');
+                item.classList.add('bg-[#0051FF]');
 
-            divPost.className = categoria.corFundo;
-            ImagemPost.src = categoria.icone;
+                divPost.className = `${categoria.corFundo} m-5 h-45 flex items-center justify-center`;
+                ImagemPost.src = categoria.icone;
 
-            idCategoria = categoria.id;
-        });
+                idCategoria = categoria.id;
+            });            
+        }
+
     });
 }
 
