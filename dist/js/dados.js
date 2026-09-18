@@ -126,8 +126,8 @@ const Modos = [
         temperatura: 20,
         nitidez: 5,
         saturacao: 25,
-        imagemFundo: null,
-        curtidas: 2441
+        imagemFundo: '../img/Imagem_Camera.jpg',
+        curtidas: 898
     },
     {
         id_modo: 2,
@@ -141,8 +141,8 @@ const Modos = [
         temperatura: 10,
         nitidez: -10,
         saturacao: -15,
-        imagemFundo: null,
-        curtidas: 1031
+        imagemFundo: '../img/Imagem_Camera.jpg',
+        curtidas: 2092
     },
     {
         id_modo: 3,
@@ -150,14 +150,15 @@ const Modos = [
         id_usuario: 3,
         nome_usuario: 'ana_r',
         nome: 'Comida Viva',
-        descricao: null,
+        descricao: '',
         brilho: -5,
         contraste: 20,
         temperatura: 10,
         nitidez: -10,
         saturacao: -15,
-        imagemFundo: null,
-        curtidas: 1809
+        imagemFundo: '../img/Imagem_Camera.jpg',
+        curtidas: 209
+
     },
     {
         id_modo: 4,
@@ -165,14 +166,14 @@ const Modos = [
         id_usuario: 4,
         nome_usuario: 'ana_r',
         nome: 'Paisagem Fria',
-        descricao: null,
+        descricao: '',
         brilho: -5,
         contraste: 20,
         temperatura: 10,
         nitidez: -10,
         saturacao: -15,
-        imagemFundo: null,
-        curtidas: 650
+        imagemFundo: '../img/Imagem_Camera.jpg',
+        curtidas: 789
     },
     {
         id_modo: 5,
@@ -180,14 +181,15 @@ const Modos = [
         id_usuario: 5,
         nome_usuario: 'joao_lens',
         nome: 'Festa Neon',
-        descricao: null,
+        descricao: '',
         brilho: -5,
         contraste: 20,
         temperatura: 10,
         nitidez: -10,
         saturacao: -15,
-        imagemFundo: null,
-        curtidas: 2100
+        imagemFundo: '../img/Imagem_Camera.jpg',
+        curtidas: 1827
+
     },
     {
         id_modo: 6,
@@ -195,14 +197,14 @@ const Modos = [
         id_usuario: 6,
         nome_usuario: 'joao_lens',
         nome: 'Flash Suave',
-        descricao: null,
+        descricao: '',
         brilho: -5,
         contraste: 20,
         temperatura: 10,
         nitidez: -10,
         saturacao: -15,
-        imagemFundo: null,
-        curtidas: 121
+        imagemFundo: '../img/Imagem_Camera.jpg',
+        curtidas: 2000
     },
     
 ];
@@ -343,4 +345,32 @@ export function AdicionandoCurtida(idModo, idUsuario,curtido) {
 
     objcurtidas.push(novaCurtida);
     localStorage.setItem('curtidas', JSON.stringify(objcurtidas));
+}
+
+// ####################################### DOWNLOAD #######################################
+const downloadModos = [];
+
+export function InicializarDownloadModos() {
+    if (localStorage.getItem('downloadModos') === null) {
+        localStorage.setItem('downloadModos', JSON.stringify(downloadModos));
     }
+}
+
+export function obterDownloadsSalvos() {
+    const objDownloadModos = JSON.parse(localStorage.getItem('downloadModos')); 
+    return objDownloadModos;
+};
+
+export function AdicionandoDownload(idModo,idUsuario) {
+    const objDownloadModos = JSON.parse(localStorage.getItem('downloadModos'));    
+
+    const novoDownload = {
+        idDownloadModo: Date.now(),
+        idModo: idModo,
+        idUsuario: idUsuario,
+    }
+
+    objDownloadModos.push(novoDownload);
+    localStorage.setItem('downloadModos', JSON.stringify(objDownloadModos));
+}
+

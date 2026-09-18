@@ -1,53 +1,118 @@
 import {obterCategoriasSalvas,obterModosSalvos,obterModosProSalvos,InicializarComentarios,obterComentariosSalvos,CriandoComentario,obterUsuariosSalvos,
-    InicializarCurtidas,obterCurtidasSalvas,AdicionandoCurtida
-} from './dados.js'
+InicializarCurtidas,obterCurtidasSalvas,AdicionandoCurtida} from './dados.js';
 
+import {AplicarFiltro, AplicarFiltroObturador, AplicarFiltroISO} from './filtros.js';
+
+// ID DO MODO
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-
 const idModo = Number(urlParams.get('id'));
 
+// CONFIGURAÇÔES NORMAIS
 const configSeta = document.getElementById('Config_Seta');
-const configProSeta = document.getElementById('ConfigPro_Seta');
-
 const configOpcoes = document.getElementById('Config_Opcoes');
-const configProOpcoes = document.getElementById('configProOpcoes');
-
 const configImagem = document.getElementById('configImagem');
+let ConfigSelecionada = 'Selecionada';
+
+// CONFIGURAÇÔES PRO
+const configProSeta = document.getElementById('ConfigPro_Seta');
+const configProOpcoes = document.getElementById('configProOpcoes');
 const configProImagem = document.getElementById('configProImagem');
+let ConfigProSelecionada = 'Selecionada';
+
+// SVG
+const blurObturadorSVG = document.getElementById('blurObturador');
+const turbulenciaISOSVG = document.getElementById('turbulenciaISO');
+const opacidadeISOSVG = document.getElementById('opacidadeISO');
 
 const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado')) ?? 0;
 
-let ConfigSelecionada = 'Selecionada';
-let ConfigProSelecionada = 'Selecionada';
-
+// COMENTARIOS
 const novoComentarioInput = document.getElementById('NovoComentarioInput');
 const buttonEnviarComentario = document.getElementById('Button_EnviarComentario');
 
+// CURTIDAS
 const iconCoracaoUm = document.getElementById('coracaoUm');
 const CurtirModo = document.getElementById('Curtir_Modo');
 
+//INICIALIZADORES
+ExibirModos();
 InicializarCurtidas();
 
-buttonEnviarComentario.addEventListener('click', () => {
+// FUNCOES
+function ExibirModos() {
+    const categorias = obterCategoriasSalvas();
+    const modosPro = obterModosProSalvos();
+    const modos = obterModosSalvos();
+    const curtidas = obterCurtidasSalvas();
 
-    if (novoComentarioInput.value === '') {
-        novoComentarioInput.focus();
-        novoComentarioInput.classList.remove('animate-shake');
-        void novoComentarioInput.offsetWidth; 
-        novoComentarioInput.classList.add('animate-shake');
-    } else{
-        CriandoComentario(idModo, usuarioAtual.id, novoComentarioInput.value);
-        ExibirComentarios();
-        novoComentarioInput.value = '';
+    const modoFiltrado = modos.find(m => m.id_modo === idModo);
+    const categoriaFiltrada = categorias.find(c => c.id === modoFiltrado.id_categoria);
+    const curtidasFiltradas = curtidas.filter(c => c.idModo === modoFiltrado.id_modo);
+    const usuarioJaCurtiu = curtidasFiltradas.some(c => c.idUsuario === usuarioAtual.id);
+    const configPro = modosPro.find(mp => mp.id_modo === modoFiltrado.id_modo);
+
+    const camposTexto = {
+        DetalheNome: modoFiltrado.nome,
+        DetalheUsuario: `por @${modoFiltrado.nome_usuario}` ,
+        DetalheCurtidas: modoFiltrado.curtidas + curtidasFiltradas.length,
+        DetalheDescricao: `${modoFiltrado.descricao}` ?? 'Sem descrição',
+        DetalheCategoria: categoriaFiltrada.nome,
+        DetalheBrilho: modoFiltrado.brilho ?? 0,
+        DetalheContraste: modoFiltrado.contraste ?? 0,
+        DetalheTemperatura: modoFiltrado.temperatura ?? 0,
+        DetalheSaturacao: modoFiltrado.saturacao ?? 0
+    };
+
+    for (const [Texto, valor] of Object.entries(camposTexto)) {
+        const elemento = document.getElementById(Texto);
+        elemento.textContent = valor;
     }
-})
 
-function ExcluirComentario (idComentario) {
-    const objComentario = obterComentariosSalvos();
+    document.getElementById('DetalhePreview').src = modoFiltrado.imagemFundo;
+    document.getElementById('DetalhePreview').style.filter = AplicarFiltro(
+        modoFiltrado.brilho,
+        modoFiltrado.contraste,
+        modoFiltrado.temperatura,
+        modoFiltrado.saturacao,
+        configPro?.exposicao ?? 0,
+        configPro?.abertura ?? 22
+    );
 
-    const objComentarioFiltrado = objComentario.filter(comentario => comentario.id_comentario !== idComentario);
-    localStorage.setItem('comentarios', JSON.stringify(objComentarioFiltrado));
+    document.getElementById('Imagem_Post_Detalhe').src = categoriaFiltrada.icone;
+    document.getElementById('Div_Post_Detalhe').className = `${categoriaFiltrada.corFundo} m-5 h-50 flex items-center justify-center`;
+
+    if(usuarioJaCurtiu) {
+        iconCoracaoUm.src = '../img/Icon_CoracaoCheio.png';
+    } else {
+        iconCoracaoUm.src = '../img/Icon_Coracao.png';
+    }
+
+    if (configPro) {
+        document.getElementById('DetalhePro').classList.remove('hidden');
+        document.getElementById('DetalheConfigPro_Bloco').classList.remove('hidden');
+
+        const camposTextoPro = {
+            DetalheISO: configPro.iso ?? 0,
+            DetalheObturador: configPro.obturador ?? 0,
+            DetalheAbertura: configPro.abertura ?? 22,
+            DetalheExposicao: configPro.exposicao ?? 0
+        };
+
+        AplicarFiltroObturador(blurObturadorSVG, configPro.obturador ?? 0);
+        AplicarFiltroISO(turbulenciaISOSVG, opacidadeISOSVG, configPro.iso ?? 0);
+
+        for (const [Texto, valor] of Object.entries(camposTextoPro)) {
+            const elemento = document.getElementById(Texto);
+            elemento.textContent = valor;
+        }
+    } else {
+        document.getElementById('DetalhePro').classList.add('hidden');
+        document.getElementById('DetalheConfigPro_Bloco').classList.add('hidden');
+    }
+
+    InicializarComentarios();
+    ExibirComentarios();
 }
 
 function ExibirComentarios() {
@@ -76,8 +141,8 @@ function ExibirComentarios() {
         item.innerHTML = `
             <img src="${usuario.fotoPerfil}" class="w-8 h-8 rounded-full object-cover shrink-0">
             <div class="flex flex-row flex-wrap justify-between w-full gap-2 items-baseline">
-            <div>
-                <span class="text-white  text-lg font-bold">@${usuario.nome}</span>
+            <div class ="max-w-[80%]">
+                <span class="text-white text-lg font-bold">@${usuario.nome}</span>
                 <span class="text-white/80 text-lg">${comentario.ds_comentario}</span>            
             </div>
                 <img src="../img/Sair_Icon.png" alt="Icone de Sair" class="w-4 cursor-pointer hidden apagarComentario">
@@ -102,7 +167,7 @@ function ExibirComentarios() {
     }
 }
 
-function AlternarCuritdas () {
+function AlternarCuritdas() {
     const objCurtida = obterCurtidasSalvas();
 
     const jaCurtiu = objCurtida.find(c => c.idUsuario === usuarioAtual.id && c.idModo === idModo);
@@ -121,74 +186,15 @@ function AlternarCuritdas () {
     }
 }
 
-iconCoracaoUm.addEventListener('click', AlternarCuritdas);
-CurtirModo.addEventListener('click', AlternarCuritdas);
+function ExcluirComentario (idComentario) {
+    const objComentario = obterComentariosSalvos();
 
-
-function ExibirModos() {
-    const categorias = obterCategoriasSalvas();
-    const modosPro = obterModosProSalvos();
-    const modos = obterModosSalvos();
-    const curtidas = obterCurtidasSalvas();
-    
-    const modoFiltrado = modos.find(m => m.id_modo === idModo);
-    const categoriaFiltrada = categorias.find(c => c.id === modoFiltrado.id_categoria);
-    const curtidasFiltradas = curtidas.filter(c => c.idModo === modoFiltrado.id_modo);
-    const usuarioJaCurtiu = curtidasFiltradas.some(c => c.idUsuario === usuarioAtual.id);
-
-    const camposTexto = {
-        DetalheNome: modoFiltrado.nome,
-        DetalheUsuario: `por @${modoFiltrado.nome_usuario}` ,
-        DetalheCurtidas: curtidasFiltradas.length,
-        DetalheDescricao: `${modoFiltrado.descricao}` ?? 'Sem descrição',
-        DetalheCategoria: categoriaFiltrada.nome,
-        DetalheBrilho: modoFiltrado.brilho ?? 0,
-        DetalheContraste: modoFiltrado.contraste ?? 0,
-        DetalheTemperatura: modoFiltrado.temperatura ?? 0,
-        DetalheSaturacao: modoFiltrado.saturacao ?? 0
-    };
-
-for (const [Texto, valor] of Object.entries(camposTexto)) {
-    const elemento = document.getElementById(Texto);
-    elemento.textContent = valor;
+    const objComentarioFiltrado = objComentario.filter(comentario => comentario.id_comentario !== idComentario);
+    localStorage.setItem('comentarios', JSON.stringify(objComentarioFiltrado));
 }
 
-document.getElementById('Imagem_Post_Detalhe').src = categoriaFiltrada.icone;
-document.getElementById('Div_Post_Detalhe').className = `${categoriaFiltrada.corFundo} m-5 h-50 flex items-center justify-center`;
 
-if(usuarioJaCurtiu) {
-    iconCoracaoUm.src = '../img/Icon_CoracaoCheio.png';
-} else {
-    iconCoracaoUm.src = '../img/Icon_Coracao.png';
-}
-
-const configPro = modosPro.find(mp => mp.id_modo === modoFiltrado.id_modo);
-
-if (configPro) {
-    document.getElementById('DetalhePro').classList.remove('hidden');
-    document.getElementById('DetalheConfigPro_Bloco').classList.remove('hidden');
-
-    const camposTextoPro = {
-        DetalheISO: configPro.iso ?? 0,
-        DetalheObturador: configPro.obturador ?? 0,
-        DetalheAbertura: configPro.abertura ?? 22,
-        DetalheExposicao: configPro.exposicao ?? 0
-    };
-
-    for (const [Texto, valor] of Object.entries(camposTextoPro)) {
-        const elemento = document.getElementById(Texto);
-        elemento.textContent = valor;
-    }
-} else {
-    document.getElementById('DetalhePro').classList.add('hidden');
-    document.getElementById('DetalheConfigPro_Bloco').classList.add('hidden');
-}
-
-InicializarComentarios();
-ExibirComentarios();
-
-}
-
+// LISTENERS
 configSeta.addEventListener('click', () => {
     if (ConfigSelecionada === 'N_Selecionado') {
         configOpcoes.classList.remove('max-h-0','opacity-0');
@@ -217,4 +223,19 @@ configProSeta.addEventListener('click', () => {
     }
 })
 
-ExibirModos();
+buttonEnviarComentario.addEventListener('click', () => {
+    if (novoComentarioInput.value === '') {
+        novoComentarioInput.focus();
+        novoComentarioInput.classList.remove('animate-shake');
+        void novoComentarioInput.offsetWidth; 
+        novoComentarioInput.classList.add('animate-shake');
+    } else{
+        CriandoComentario(idModo, usuarioAtual.id, novoComentarioInput.value);
+        ExibirComentarios();
+        novoComentarioInput.value = '';
+    }
+})
+
+iconCoracaoUm.addEventListener('click', AlternarCuritdas);
+CurtirModo.addEventListener('click', AlternarCuritdas);
+

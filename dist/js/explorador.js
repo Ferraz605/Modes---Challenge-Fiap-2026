@@ -1,33 +1,40 @@
-import {InicializarCategoria,obterCategoriasSalvas,obterModosSalvos,obterModosProSalvos,InicializarModos} from './dados.js'
+import {InicializarCategoria,obterCategoriasSalvas,obterModosSalvos,obterModosProSalvos,InicializarModos,InicializarCurtidas,obterCurtidasSalvas,AdicionandoCurtida,
+InicializarDownloadModos,AdicionandoDownload,obterDownloadsSalvos} from './dados.js';
 
-const lupaPesquisar = document.getElementById('LupaPesquisar');
-const logoModes = document.getElementById('logoModes');
+// HEADER
 const headerModes = document.getElementById('headerModes');
+const logoModes = document.getElementById('logoModes');
+const lupaPesquisar = document.getElementById('LupaPesquisar');
 const pesquisarModoInput = document.getElementById('PesquisaModosInput');   
+const nadaEncontrado = document.getElementById('nadaEncontrado');
+let tipoLupa = 'N_selecionado';
+
+// LISTA DE MODOS
 const listaDestaque = document.getElementById('listaDestaques'); 
 const sectionDestaques = document.getElementById('sectionDestaques');
 const descubraText = document.getElementById('DescubraText');
-const nadaEncontrado = document.getElementById('nadaEncontrado');
-
-let tipoLupa = 'N_selecionado';
 
 // CATEGORIAS
 const listaCategorias = document.getElementById('listaCategorias');
 
+const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado')) ?? 0;
+
 // FILTRO DE MODOS
 let idCategoriaFiltro = 0;
 
+
+// INICIALIZAÇÔES
+InicializarCategoria();
+InicializarCurtidas();
+InicializarDownloadModos();
+InicializarModos();
+
+ExibirCategoriasExplorador();
+ExibirModos();
+ExibirModosDestaque();
+
+
 // FUNÇÔES
-function InicializarStorage() {
-    InicializarCategoria();
-    InicializarModos();
-    ExibirCategoriasExplorador();
-    ExibirModos();
-    ExibirModosDestaque ();
-}
-
-InicializarStorage()
-
 function ExibirCategoriasExplorador() {
     const objCategoria = obterCategoriasSalvas();
 
@@ -80,13 +87,23 @@ function ExibirModosDestaque () {
     const modos = obterModosSalvos();
     const categorias = obterCategoriasSalvas();
     const modosPro = obterModosProSalvos();
+    const downloadModo = obterDownloadsSalvos();
 
     const ordenadas = modos.sort((a,b) => b.curtidas - a.curtidas)
     const recentes = ordenadas.slice(0,4);
+    const curtidas = obterCurtidasSalvas();
+
+    listaDestaque.innerHTML = '';
 
     recentes.forEach(modo => { 
         const categoria = categorias.find(c => c.id === modo.id_categoria);
         const configPro = modosPro.find(mp => mp.id_modo === modo.id_modo);
+
+        const downloadsFiltrados = downloadModo.filter(d => d.idModo === modo.id_modo)
+        const curtidasFiltradas = curtidas.filter(c => c.idModo === modo.id_modo);
+
+        const usuarioJaCurtiu = curtidasFiltradas.some(c => c.idUsuario === usuarioAtual.id);
+        const usuarioJaBaixou = downloadsFiltrados.some(d => d.idUsuario === usuarioAtual.id);
 
         const card = document.createElement('div');
         card.className = `h-55 rounded-sm overflow-hidden relative border border-white/20 shadow-[10px_2px_4px_-3px_rgba(0,0,0,0.5)] ${categoria.corFundo}`;
@@ -107,22 +124,36 @@ function ExibirModosDestaque () {
                     ${configPro ? '<span class="bg-[#55586C] text-white text-xs rounded-md px-2 py-1">Pro</span>' : '<span class="bg-[#55586C] text-white text-xs rounded-md opacity-0 px-2 py-1">Normal</span>'}
                 </div>
 
-
                 <div class="flex flex-row justify-between items-center mt-2">
-                    <div class="flex flex-row items-center gap-2 cursor-pointer">
-                        <img src="../img/Icon_Coracao.png" alt="Curtidas" class="w-5">
-                        <span class="text-white text-lg">${modo.curtidas}</span>
+                    <div class="flex flex-row items-center gap-2  ">
+                        <img src="${usuarioJaCurtiu ? '../img/Icon_CoracaoCheio.png' : '../img/Icon_Coracao.png'}" alt="Curtidas" class="w-5 coracaoS cursor-pointer">
+                        <span class="text-white text-lg">${modo.curtidas + curtidasFiltradas.length}</span>
                     </div>
-                    <img src="../img/Icon_Download.png" alt="Baixar" class="w-5 cursor-pointer">
+                    <img src="${usuarioJaBaixou ? '../img/Sair_Icon.png' : '../img/Icon_Download.png'}" alt="Baixar" class="w-5 cursor-pointer downloadS">
                 </div>
             </div>
         `;
+
+       const coracaoS = card.querySelector('.coracaoS')
+       const downloadS = card.querySelector('.downloadS')
+
         listaDestaque.appendChild(card);
+        
+        coracaoS.addEventListener('click', (evento) => {
+            evento.stopPropagation();
+            AlternarCuritdas(modo.id_modo);
+            ExibirModosDestaque();
+        })
+
+        downloadS.addEventListener('click', (evento) => {
+            evento.stopPropagation();
+            AlternarDownload(modo.id_modo);
+            ExibirModosDestaque();
+        })
 
         card.addEventListener('click', () => {
             window.location.href = `detalhes.html?id=${modo.id_modo}`;
         });
-
     });
 }
 
@@ -135,6 +166,8 @@ function ExibirModos(modosFiltrados) {
         modos = modosFiltrados;
     }
 
+    const curtidas = obterCurtidasSalvas();
+    const downloadModo = obterDownloadsSalvos();
     const categorias = obterCategoriasSalvas();
     const modosPro = obterModosProSalvos();
     const listaModos = document.getElementById('listaModos');
@@ -143,6 +176,12 @@ function ExibirModos(modosFiltrados) {
     modos.forEach(modo => { 
         const categoria = categorias.find(c => c.id === modo.id_categoria);
         const configPro = modosPro.find(mp => mp.id_modo === modo.id_modo);
+
+        const downloadsFiltrados = downloadModo.filter(d => d.idModo === modo.id_modo)
+        const curtidasFiltradas = curtidas.filter(c => c.idModo === modo.id_modo);
+
+        const usuarioJaCurtiu = curtidasFiltradas.some(c => c.idUsuario === usuarioAtual.id);
+        const usuarioJaBaixou = downloadsFiltrados.some(d => d.idUsuario === usuarioAtual.id);
 
         const card = document.createElement('div');
         card.className = `h-55 rounded-sm overflow-hidden relative border border-white/20 shadow-[10px_2px_4px_-3px_rgba(0,0,0,0.5)] ${categoria.corFundo}`;
@@ -165,16 +204,34 @@ function ExibirModos(modosFiltrados) {
 
 
                 <div class="flex flex-row justify-between items-center mt-2">
-                    <div class="flex flex-row items-center gap-2 cursor-pointer">
-                        <img src="../img/Icon_Coracao.png" alt="Curtidas" class="w-5">
-                        <span class="text-white text-lg">${modo.curtidas}</span>
+                    <div class="flex flex-row items-center gap-2">
+                        <img src="${usuarioJaCurtiu ? '../img/Icon_CoracaoCheio.png' : '../img/Icon_Coracao.png'}" alt="Curtidas" class="w-5 coracaoS cursor-pointer">
+                        <span class="text-white text-lg">${modo.curtidas + curtidasFiltradas.length}</span>
                     </div>
-                    <img src="../img/Icon_Download.png" alt="Baixar" class="w-5 cursor-pointer">
+                    <img src="${usuarioJaBaixou ? '../img/Sair_Icon.png' : '../img/Icon_Download.png'}" alt="Baixar" class="w-5 cursor-pointer downloadS">
                 </div>
             </div>
         `;        
         
+        const coracaoS = card.querySelector('.coracaoS')
+        const downloadS = card.querySelector('.downloadS')
+
         listaModos.appendChild(card);
+
+        coracaoS.addEventListener('click', (evento) => {
+            evento.stopPropagation();
+            AlternarCuritdas(modo.id_modo);
+            ExibirModos();
+            ExibirModosDestaque();
+
+        })
+
+        downloadS.addEventListener('click', (evento) => {
+            evento.stopPropagation();
+            AlternarDownload(modo.id_modo);
+            ExibirModos();
+            ExibirModosDestaque();
+        })
 
             card.addEventListener('click', () => {
             window.location.href = `detalhes.html?id=${modo.id_modo}`;
@@ -193,6 +250,37 @@ function ExibirModos(modosFiltrados) {
         }
 }
 
+function AlternarDownload (idModo) {
+    const objDownloadModos = obterDownloadsSalvos();
+
+    const jaBaixou = objDownloadModos.find(d => d.idUsuario === usuarioAtual.id && d.idModo === idModo);
+
+    if(jaBaixou){
+        const downloadAtualizado = objDownloadModos.filter(c => !(c.idUsuario === usuarioAtual.id && c.idModo === idModo));
+        localStorage.setItem('downloadModos', JSON.stringify(downloadAtualizado));  
+        ExibirModos();
+    } else {
+        AdicionandoDownload(idModo, usuarioAtual.id);
+        ExibirModos();
+    }    
+}
+
+function AlternarCuritdas (idModo) {
+    const objCurtida = obterCurtidasSalvas();
+
+    const jaCurtiu = objCurtida.find(c => c.idUsuario === usuarioAtual.id && c.idModo === idModo);
+
+    if(jaCurtiu){
+        const curtidasAtualizadas = objCurtida.filter(c => !(c.idUsuario === usuarioAtual.id && c.idModo === idModo));
+        localStorage.setItem('curtidas', JSON.stringify(curtidasAtualizadas));  
+        ExibirModos();
+    } else {
+        AdicionandoCurtida(idModo,usuarioAtual.id)
+        ExibirModos();
+    }
+}
+
+// LISTENERS
 lupaPesquisar.addEventListener('click', () => {
     if(tipoLupa === 'N_selecionado') {
         pesquisarModoInput.className = 'text-white h-10 text-[18px] border-b border-white outline-none opacity-100 w-50 max-sm:w-full transition-all duration-300';

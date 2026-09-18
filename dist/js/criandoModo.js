@@ -1,4 +1,5 @@
-import {InicializarCategoria,obterCategoriasSalvas,CriandoModo,CriandoModoPro,InicializarModos,InicializarModosPro} from './dados.js'
+import {InicializarCategoria,obterCategoriasSalvas,CriandoModo,CriandoModoPro,InicializarModos,InicializarModosPro} from './dados.js';
+import {AplicarFiltro} from './filtros.js';
 
 // DESCRITIVO
 const nomeModo = document.getElementById('nomeModo');
@@ -81,16 +82,13 @@ const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado'));
 const nomeUsuario = usuarioAtual?.nome ?? 'UU';
 const idUsuario = usuarioAtual?.ud ?? Date.now();
 
+//INICIALIZADORES
+InicializarCategoria();
+ExibirCategorias();
+InicializarModos();
+InicializarModosPro();
+
 // FUNÇÔES
-function InicializarStorage() {
-    InicializarCategoria();
-    ExibirCategorias();
-    InicializarModos();
-    InicializarModosPro();
-}
-
-InicializarStorage()
-
 function ExibirCategorias() {
     const objCategoria = obterCategoriasSalvas();
 
@@ -121,32 +119,6 @@ function ExibirCategorias() {
     });
 }
 
-function ConverterParaFiltro() {
-    let resultado = {};
-
-    for (const [chave, valor] of Object.entries(valoresFiltro)) {
-        const valorConvertido = (valor / 100) + 1;
-        resultado[chave] = valorConvertido;
-    }
-
-    return resultado;
-}
-
-function ConverterTemperatura(valorTemperatura) {
-    if (valorTemperatura >= 0) {
-        const sepiaValor = valorTemperatura / 100;
-        return `sepia(${sepiaValor})`;
-    } else {
-        const hueValor = Math.abs(valorTemperatura) * 2;
-        return `hue-rotate(${hueValor}deg)`;
-    }
-}
-
-function ConverterAbertura(valorAbertura) {
-    const blurInvertido = (22 - valorAbertura) / 4; 
-    return blurInvertido;
-}
-
 function ResetarFiltroPro () {
     valorExposicao = 0;
     exposicao.value = 0;
@@ -166,16 +138,7 @@ function ResetarFiltroPro () {
 
     blurObturadorSVG.setAttribute('stdDeviation', '0 0');
 
-    imagemPreview.style.filter = AplicarFiltro();   
-}
-
-function AplicarFiltro() {
-    let valorConvertido = ConverterParaFiltro();
-    const brilhoTotal = valorConvertido.brilho + (valorExposicao / 100);
-    let filtro = `brightness(${brilhoTotal}) contrast(${valorConvertido.contraste}) ${ConverterTemperatura(valorTemperatura)} saturate(${valorConvertido.saturacao}) blur(${ConverterAbertura(valorAbertura)}px)
-    url(#filtroObturador) url(#filtroISO)`;
-    return filtro;
-    
+    imagemPreview.style.filter = AplicarFiltro(brilho.value,contraste.value,temperatura.value,saturacao.value,exposicao.value,abertura.value);   
 }
 
 function MarcarErro (nomeCampo) {
@@ -210,7 +173,6 @@ function Publicar () {
 }
 
 // LISTENERS
-
 botaoFundo.addEventListener('click', () =>{
     adicionarFundo.click();
 })
@@ -296,32 +258,32 @@ configProSeta.addEventListener('click', () => {
 brilho.addEventListener('input', () => {
     valoresFiltro.brilho = brilho.value;
     bilhoText.textContent = brilho.value;
-    imagemPreview.style.filter = AplicarFiltro();
+    imagemPreview.style.filter = AplicarFiltro(brilho.value,contraste.value,temperatura.value,saturacao.value,exposicao.value,abertura.value);
 })
 
 contraste.addEventListener('input', () => {
     valoresFiltro.contraste = contraste.value;
     contrasteText.textContent = contraste.value;
-    imagemPreview.style.filter = AplicarFiltro();
+    imagemPreview.style.filter = AplicarFiltro(brilho.value,contraste.value,temperatura.value,saturacao.value,exposicao.value,abertura.value);
 })
 
 temperatura.addEventListener('input', () => {
     valorTemperatura = temperatura.value;
     temperaturaText.textContent = temperatura.value;
-    imagemPreview.style.filter = AplicarFiltro();
+    imagemPreview.style.filter = AplicarFiltro(brilho.value,contraste.value,temperatura.value,saturacao.value,exposicao.value,abertura.value);
 })
 
 saturacao.addEventListener('input', () => {
     valoresFiltro.saturacao = saturacao.value;
     SaturacaoText.textContent = saturacao.value;
-    imagemPreview.style.filter = AplicarFiltro();
+    imagemPreview.style.filter = AplicarFiltro(brilho.value,contraste.value,temperatura.value,saturacao.value,exposicao.value,abertura.value);
 })
 
 exposicao.addEventListener('input', () => {
     if(estadoPro.textContent.trim() === 'Ativado'){
         valorExposicao = exposicao.value;
         exposicaoText.textContent = exposicao.value;
-        imagemPreview.style.filter = AplicarFiltro();        
+        imagemPreview.style.filter = AplicarFiltro(brilho.value,contraste.value,temperatura.value,saturacao.value,exposicao.value,abertura.value);        
     }
 })
 
@@ -329,7 +291,7 @@ abertura.addEventListener('input', () => {
     if(estadoPro.textContent.trim() === 'Ativado'){
         valorAbertura = abertura.value;
         aberturaText.textContent = abertura.value;
-        imagemPreview.style.filter = AplicarFiltro();        
+        imagemPreview.style.filter = AplicarFiltro(brilho.value,contraste.value,temperatura.value,saturacao.value,exposicao.value,abertura.value);        
     }
 
 })
@@ -339,7 +301,7 @@ obturador.addEventListener('input', () => {
         obturadorText.textContent = obturador.value;
         
         blurObturadorSVG.setAttribute('stdDeviation', `${valorObturador / 20} 0`); 
-        imagemPreview.style.filter = AplicarFiltro();        
+        imagemPreview.style.filter = AplicarFiltro(brilho.value,contraste.value,temperatura.value,saturacao.value,exposicao.value,abertura.value);       
     }
 })
 
@@ -364,7 +326,7 @@ iso.addEventListener('input', () => {
             0 0 0 ${intensidade} 0`
         );
 
-        imagemPreview.style.filter = AplicarFiltro();        
+        imagemPreview.style.filter = AplicarFiltro(brilho.value,contraste.value,temperatura.value,saturacao.value,exposicao.value,abertura.value);  
     }
 })
 

@@ -1,3 +1,6 @@
+import {InicializarDownloadModos,obterDownloadsSalvos,InicializarUsuario,obterModosSalvos,obterModosProSalvos} from './dados.js';
+import {AplicarFiltro,AplicarFiltroObturador,AplicarFiltroISO,CapturarComFiltro} from './filtros.js';
+
 const sectionLista = document.getElementById('sectionLista');
 const ButtonModes = document.getElementById('ButtonModes');
 const modalOpcoes = document.getElementById('modal_Opcoes');
@@ -11,14 +14,82 @@ const abrirGaleria = document.getElementById('AbrirGaleria');
 const sairGaleria = document.getElementById('Sair_Galeria');
 
 const buttonCapturar = document.getElementById('Button_Capturar');
+const cameraAtual = document.getElementById('Camera_Atual');
+let modoAtivoId = null;
 
-const ListaFiltroConteudo = document.getElementById('Lista_Filtros_Conteudo');
+const ImagemGaleria = document.getElementById('Imagem_Galeria');
 
-const CameraAtual = document.getElementById('Camera_Atual');
+const blurObturadorSVG = document.getElementById('blurObturador');
+const turbulenciaISOSVG = document.getElementById('turbulenciaISO');
+const opacidadeISOSVG = document.getElementById('opacidadeISO');
 
 let tipoSelecionado = 'N_Selecionado';
-let tipoGaleria = 'Desligado';
 
+// INICIALIZAÇÔES
+InicializarDownloadModos();
+InicializarUsuario();
+
+function ListarModos () {
+    const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado')) ?? 0;
+
+    const modosBaixados = obterDownloadsSalvos();
+    const modos = obterModosSalvos();
+    const pro = obterModosProSalvos();
+    const ListaConteudo = document.getElementById('Lista_Filtros_Conteudo');
+    ListaConteudo.innerHTML = '';
+
+    const modosFiltrado = modosBaixados.filter(m => m.idUsuario === usuarioAtual.id);
+
+    if (modosFiltrado.length === 0) {
+        const item = document.createElement('li');
+        item.textContent = 'Sem Modos...';
+        item.className = 'text-2xl text-white opacity-60';
+        ListaConteudo.appendChild(item);
+    } else {
+        modosFiltrado.forEach((modo) => {
+            const modoCompleto = modos.find(m => m.id_modo === modo.idModo);
+            const ModoPro = pro.find(p => p.id_modo === modo.idModo);
+
+            const item = document.createElement('li');
+            item.textContent = modoCompleto.nome;
+            item.className = 'text-lg text-white/70 cursor-pointer whitespace-nowrap shrink-0';
+            item.dataset.modoId = modoCompleto.id_modo;
+
+            item.addEventListener('click', () => {
+            ListaConteudo.querySelectorAll('li').forEach(li => {
+                li.classList.add('text-white/70');
+                li.classList.remove('text-white');
+            });            
+
+            if(modoAtivoId === modo.id_modo) {
+                 cameraAtual.style.filter = '';
+                 modoAtivoId = null;
+            } else {
+                item.classList.remove('text-white/70');
+                item.classList.add('text-white');
+
+                cameraAtual.style.filter = AplicarFiltro(modoCompleto.brilho,modoCompleto.contraste,modoCompleto.temperatura,modoCompleto.saturacao, ModoPro?.exposicao ?? 0, ModoPro?.abertura ?? 22);
+                AplicarFiltroObturador(blurObturadorSVG, 0);
+                AplicarFiltroISO(turbulenciaISOSVG, opacidadeISOSVG, 0);
+
+                if (ModoPro) {
+                    AplicarFiltroObturador(blurObturadorSVG, ModoPro.obturador);
+                    AplicarFiltroISO(turbulenciaISOSVG, opacidadeISOSVG, ModoPro.iso);
+                } else {
+                    AplicarFiltroObturador(blurObturadorSVG, 0);
+                    AplicarFiltroISO(turbulenciaISOSVG, opacidadeISOSVG, 0);
+                }                
+                modoAtivoId = modo.id_modo;
+            }
+            })
+
+            ListaConteudo.appendChild(item);
+        });
+    }
+}
+
+
+ListarModos();
 
 ButtonModes.addEventListener('click', () => {
     if (tipoSelecionado === 'N_Selecionado') {
@@ -75,14 +146,25 @@ sairGaleria.addEventListener('click', () => {
     }, 300);
 });
 
+
+
 buttonCapturar.addEventListener('click', () => {
     buttonCapturar.classList.add('bg-white');
-    CameraAtual.classList.remove('opacity-90');
-    CameraAtual.classList.add('opacity-50');
+    cameraAtual.classList.remove('opacity-90');
+    cameraAtual.classList.add('opacity-50');
 
-        setTimeout(() => {
-            buttonCapturar.classList.remove('bg-white');
-            CameraAtual.classList.remove('opacity-50');
-            CameraAtual.classList.add('opacity-90');
+    setTimeout(() => {
+        buttonCapturar.classList.remove('bg-white');
+        cameraAtual.classList.remove('opacity-50');
+        cameraAtual.classList.add('opacity-90');
+
+        const fotoCongelada = CapturarComFiltro(cameraAtual, cameraAtual.style.filter);
+
+        ImagemGaleria.src = fotoCongelada;
+        ImagemGaleria.style.filter = '';
+
+        abrirGaleria.src = fotoCongelada;
+        abrirGaleria.style.filter = '';
     }, 200);
+    
 })
