@@ -374,3 +374,29 @@ export function AdicionandoDownload(idModo,idUsuario) {
     localStorage.setItem('downloadModos', JSON.stringify(objDownloadModos));
 }
 
+// ####################################### SALVOS #######################################
+const salvos = [];
+
+export function InicializarSalvos() {
+    if (localStorage.getItem('salvos') === null) {
+        localStorage.setItem('salvos', JSON.stringify(salvos));
+    }
+}
+
+export function obterSalvos() {
+    const objSalvos = JSON.parse(localStorage.getItem('salvos')); 
+    return objSalvos;
+};
+
+export function AdicionandoSalvos(idModo,idUsuario) {
+    const objSalvos = JSON.parse(localStorage.getItem('salvos'));    
+
+    const novoSalvo = {
+        idSalvo: Date.now(),
+        idModo: idModo,
+        idUsuario: idUsuario,
+    }
+
+    objSalvos.push(novoSalvo);
+    localStorage.setItem('salvos', JSON.stringify(objSalvos));
+}

@@ -1,5 +1,6 @@
 import {obterCategoriasSalvas,obterModosSalvos,obterModosProSalvos,InicializarComentarios,obterComentariosSalvos,CriandoComentario,obterUsuariosSalvos,
-InicializarCurtidas,obterCurtidasSalvas,AdicionandoCurtida} from './dados.js';
+InicializarCurtidas,obterCurtidasSalvas,AdicionandoCurtida,InicializarSalvos,obterSalvos,AdicionandoSalvos,AdicionandoDownload,
+obterDownloadsSalvos} from './dados.js';
 
 import {AplicarFiltro, AplicarFiltroObturador, AplicarFiltroISO} from './filtros.js';
 
@@ -31,13 +32,19 @@ const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado')) ?? 0;
 const novoComentarioInput = document.getElementById('NovoComentarioInput');
 const buttonEnviarComentario = document.getElementById('Button_EnviarComentario');
 
+// SALVOS
+const SalvarModo = document.getElementById('Salvar_Modo');
+
 // CURTIDAS
 const iconCoracaoUm = document.getElementById('coracaoUm');
 const CurtirModo = document.getElementById('Curtir_Modo');
 
+const AplicarModo = document.getElementById('Aplicar_Modo');
+
 //INICIALIZADORES
 ExibirModos();
 InicializarCurtidas();
+InicializarSalvos();
 
 // FUNCOES
 function ExibirModos() {
@@ -45,12 +52,16 @@ function ExibirModos() {
     const modosPro = obterModosProSalvos();
     const modos = obterModosSalvos();
     const curtidas = obterCurtidasSalvas();
+    const salvos = obterSalvos();
+
+    const salvoFiltrados = salvos.filter(s => s.idModo === idModo)
 
     const modoFiltrado = modos.find(m => m.id_modo === idModo);
     const categoriaFiltrada = categorias.find(c => c.id === modoFiltrado.id_categoria);
     const curtidasFiltradas = curtidas.filter(c => c.idModo === modoFiltrado.id_modo);
     const usuarioJaCurtiu = curtidasFiltradas.some(c => c.idUsuario === usuarioAtual.id);
     const configPro = modosPro.find(mp => mp.id_modo === modoFiltrado.id_modo);
+    const usuarioJaSalvou = salvoFiltrados.some(s => s.idUsuario === usuarioAtual.id)
 
     const camposTexto = {
         DetalheNome: modoFiltrado.nome,
@@ -86,6 +97,21 @@ function ExibirModos() {
         iconCoracaoUm.src = '../img/Icon_CoracaoCheio.png';
     } else {
         iconCoracaoUm.src = '../img/Icon_Coracao.png';
+    }
+
+    if(usuarioJaSalvou) {
+        SalvarModo.src = '../img/Icon_SalvosSl.png'
+    } else {
+        SalvarModo.src = '../img/Icon_Salvos.png'
+    }
+
+    const objDownloadModos = obterDownloadsSalvos();
+    const jaBaixou = objDownloadModos.find(d => d.idUsuario === usuarioAtual.id && d.idModo === idModo);
+
+    if (jaBaixou) {
+        AplicarModo.textContent = 'Desinstalar';
+    } else {
+        AplicarModo.textContent = 'Aplicar na Câmera';
     }
 
     if (configPro) {
@@ -167,6 +193,37 @@ function ExibirComentarios() {
     }
 }
 
+function AplicarModoCamera () {
+    const objDownloadModos = obterDownloadsSalvos();
+
+    const jaBaixou = objDownloadModos.find(d => d.idUsuario === usuarioAtual.id && d.idModo === idModo);
+
+    if(jaBaixou){
+        const downloadAtualizado = objDownloadModos.filter(c => !(c.idUsuario === usuarioAtual.id && c.idModo === idModo));
+        localStorage.setItem('downloadModos', JSON.stringify(downloadAtualizado));  
+        ExibirModos();
+
+    } else {
+        AdicionandoDownload(idModo, usuarioAtual.id);
+        ExibirModos();
+    }    
+}
+
+function AlternarSalvo() {
+    const objSalvo = obterSalvos();
+
+    const jaSalvou = objSalvo.find(s => s.idUsuario === usuarioAtual.id && s.idModo === idModo);
+
+    if(jaSalvou){
+        const salvosAtualizado = objSalvo.filter(s => !(s.idUsuario === usuarioAtual.id && s.idModo === idModo));
+        localStorage.setItem('salvos', JSON.stringify(salvosAtualizado));  
+        ExibirModos();
+    } else {    
+        AdicionandoSalvos(idModo,usuarioAtual.id)
+        ExibirModos();
+    }
+}
+
 function AlternarCuritdas() {
     const objCurtida = obterCurtidasSalvas();
 
@@ -236,6 +293,8 @@ buttonEnviarComentario.addEventListener('click', () => {
     }
 })
 
+
 iconCoracaoUm.addEventListener('click', AlternarCuritdas);
 CurtirModo.addEventListener('click', AlternarCuritdas);
-
+SalvarModo.addEventListener('click', AlternarSalvo);
+AplicarModo.addEventListener('click',AplicarModoCamera);
